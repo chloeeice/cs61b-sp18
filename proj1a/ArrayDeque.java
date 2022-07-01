@@ -4,18 +4,29 @@ public class ArrayDeque<T> {
     private int nextFirst;
     private int nextLast;
     private int size;
-    private int item = 0;
 
     /*Creates an empty array deque*/
     public ArrayDeque() {
         arrays = (T[]) new Object[8];
-        nextFirst = item + 1;
-        nextLast = item + 2;
+        nextFirst = 0;
+        nextLast = 1;
         size = 0;
     }
 
+    private void resizeCapacity(int capacity) {
+        T[] newArrays = (T[]) new Object[capacity];
+        for (int i = 0; i < size; i++) {
+            newArrays[i+1] = arrays[(nextFirst + 1 + i) % arrays.length];
+        }
+        arrays = newArrays;
+        nextFirst = 0;
+        nextLast = size + 1;
+    }
+
     public void addFirst(T item) {
-        // TODO 01: if the array is full, resize.
+        if (size == arrays.length) {
+            resizeCapacity(arrays.length * 2);
+        }
 
         arrays[nextFirst] = item;
         if (nextFirst == 0) {
@@ -27,9 +38,12 @@ public class ArrayDeque<T> {
     }
 
     public void addLast(T item) {
-        // TODO 02: if the array is full, resize.
+        if (size == arrays.length) {
+            resizeCapacity(arrays.length * 2);
+        }
+
         arrays[nextLast] = item;
-        if (nextLast == arrays.length-1) {
+        if (nextLast == arrays.length - 1) {
             nextLast = 0;
         } else {
             nextLast += 1;
@@ -45,11 +59,12 @@ public class ArrayDeque<T> {
         return size;
     }
 
-    public void printDeque() {
+    // 我的方法的printDeque()：很啰嗦
+/*    public void printDeque() {
         int count = 0;
         int first = nextFirst + 1;
         while (count < size) {
-            if (first > arrays.length-1) {
+            if (first > arrays.length - 1) {
                 first = 0;
             }
             System.out.print(arrays[first] + " ");
@@ -57,18 +72,25 @@ public class ArrayDeque<T> {
             first += 1;
         }
         System.out.println();
+    }*/
+
+    // printDeque(): better version
+    public void printDeque() {
+        for (int i = nextFirst + 1; i != nextLast; i = (i + 1) % arrays.length) {
+            System.out.print(arrays[i]);
+        }
     }
 
     public T removeFirst() {
-        if (size == 0) {
+        if (isEmpty()) {
             return null;
         }
-        if (nextFirst == arrays.length-1) {
-            nextFirst = 0;
-        } else {
-            nextFirst += 1;
+
+        if (arrays.length >= 16 && size < arrays.length / 4) {
+            resizeCapacity(arrays.length / 2);
         }
 
+        nextFirst = (nextFirst + 1) % arrays.length;
         T res = arrays[nextFirst];
         arrays[nextFirst] = null;
         size -= 1;
@@ -76,14 +98,15 @@ public class ArrayDeque<T> {
     }
 
     public T removeLast() {
-        if (size == 0) {
+        if (isEmpty()) {
             return null;
         }
-        if (nextLast == 0) {
-            nextLast = arrays.length -1;
-        } else {
-            nextLast -= 1;
+
+        if (arrays.length >= 16 && size < arrays.length / 4) {
+            resizeCapacity(arrays.length / 2);
         }
+
+        nextLast = (nextLast - 1 + arrays.length) % arrays.length;
 
         T res = arrays[nextLast];
         arrays[nextLast] = null;
@@ -92,15 +115,14 @@ public class ArrayDeque<T> {
     }
 
     public T get(int index) {
-        if (index < 0 || index > arrays.length-1) {
+        if (index < 0 || index > arrays.length - 1) {
             return null;
-        }
-        int n = nextFirst + 1 + index;
-        if (n > arrays.length-1) {
-            return arrays[n- arrays.length];
         } else {
-            return arrays[n];
+            return arrays[(nextFirst + 1 + index) % arrays.length];
         }
+
     }
 
 }
+
+
