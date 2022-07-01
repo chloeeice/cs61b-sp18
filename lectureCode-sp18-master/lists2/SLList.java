@@ -33,6 +33,13 @@ public class SLList {
 		size = 1;
 	}
 
+	/*takes in an array of integers, and creates an SLList with those integers.*/
+	public SLList(int[] x) {
+		for (i = 0; i < x.length; i++) {
+			addFirst(x[i]);
+		}
+	}
+
  	/** Adds x to the front of the list. */
  	public void addFirst(int x) {
  		sentinel.next = new IntNode(x, sentinel.next);
@@ -61,6 +68,10 @@ public class SLList {
  	/** Returns the size of the list. */
  	public int size() {
  		return size;
+ 	}
+
+ 	public void deleteFirst() {
+ 		sentinel.next = sentinel.next.next;
  	}
 
 	public static void main(String[] args) {

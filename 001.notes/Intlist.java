@@ -41,7 +41,17 @@ public class IntList {
 
 	/*return the ith item of this IntList.*/
 	public int get(int i) {
-		
+		if (rest = null) {
+			return first;
+		}
+		return rest.get(i-1);
+	}
+
+	/*adds an item to the front of the list.*/
+	public void addFirst(int x) {
+		IntList temp = this;
+		first = x;
+		rest = temp;
 	}
 }
 
