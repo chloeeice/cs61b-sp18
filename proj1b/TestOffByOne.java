@@ -8,11 +8,15 @@ public class TestOffByOne {
 
     // Your tests go here.
     @Test
-    public void TestEqualChars() {
+    public void testEqualChars() {
         char x = 'a';
         char y = 'b';
         char z = 'A';
+        char q = '&';
+        char p = '%';
         assertTrue(offByOne.equalChars(x, y));
         assertFalse(offByOne.equalChars(y, z));
+        assertTrue(offByOne.equalChars(p, q));
+        assertFalse(offByOne.equalChars(y, q));
     }
 }

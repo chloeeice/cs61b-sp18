@@ -5,7 +5,7 @@ public class TestOffByN {
     static CharacterComparator offBy5 = new OffByN(5);
 
     @Test
-    public void TestEqualChars() {
+    public void testEqualChars() {
         char x = 'a';
         char y = 'f';
         char z = 'h';
